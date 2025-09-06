@@ -24,4 +24,13 @@ if connection:
         print("\nStreaming rows one by one:")
         for row in seed.stream_rows(connection):
             print(row)
-  
+
+
+  #!/usr/bin/python3
+stream = __import__('0-stream_users').stream_users
+
+for i, row in enumerate(stream()):
+    print(row)
+    if i == 4:  # just show first 5 rows
+        break
+    
