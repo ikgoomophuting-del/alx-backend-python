@@ -14,8 +14,7 @@ It is part of the **ALX Backend Python** specialization.
 - Python 3.7
 - Ubuntu 18.04 LTS
 - All files executable and PEP8 compliant
-- All modules
-- , classes, and functions must have docstrings
+- All modules, classes, and functions must have docstrings
 - Functions and coroutines must be type-annotated
 
 ## Project Structure
