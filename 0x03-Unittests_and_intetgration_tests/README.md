@@ -87,7 +87,7 @@ All functions and coroutines must be type-annotated.
 
 ## Resources
 
-unittest — Unit testing framework
+unittest — https://docs.python.org/3/library/unittest.html
 
 unittest.mock — mock object library
 
