@@ -18,11 +18,10 @@ It is part of the **ALX Backend Python** specialization.
 - Functions and coroutines must be type-annotated
 
 ## Project Structure
-0x03-Unittests_and_integration_tests/
-├── client.py
-├── fixtures.py
-├── test_utils.py
-├── utils.py
+├── client.py          # code to test (GithubOrgClient)
+├── fixtures.py        # test fixtures (JSON for integration tests)
+├── test_utils.py      # unit tests for utils.py
+├── utils.py           # functions to test (access_nested_map, get_json, memoize)
 └── README.md
 
 
