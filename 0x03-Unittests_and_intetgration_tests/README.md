@@ -83,3 +83,50 @@ All modules, classes, and functions must include docstrings that are complete se
 
 All functions and coroutines must be type-annotated.
   
+---
+
+## Resources
+
+unittest — Unit testing framework
+
+unittest.mock — mock object library
+
+parameterized — parameterized testing for Python
+
+Memoization in Python
+
+---
+
+## Running Tests
+
+To run a specific test file:
+
+python3 -m unittest path/to/test_file.py
+
+
+Example:
+
+python3 -m unittest test_utils.py
+python3 -m unittest test_client.py
+
+
+To run all tests at once:
+
+python3 -m unittest discover
+
+---
+
+## Key Ideas
+
+Unit tests check correctness of small isolated parts.
+
+Integration tests check correctness of the entire system working together.
+
+Both are necessary to ensure reliable software.
+
+---
+
+## Author
+
+Project completed as part of ALX Backend Python program.
+
