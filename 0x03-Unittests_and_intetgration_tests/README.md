@@ -22,10 +22,11 @@ By the end of this project, you should be able to:
 ## Project Structure
 
 0x03-Unittests_and_integration_tests/
-├── client.py # Contains GithubOrgClient class 
-├── fixtures.py # Test fixtures with sample payloads 
-├── utils.py # Utility functions such as access_nested_map, get_json, memoize
-├── test_utils.py # Unit tests for utils.py
-├── test_client.py # Unit tests for client.py
-├── test_integration.py # Integration tests for GithubOrgClient
-└── README.md # Project documentation
+
+├── client.py             # Contains GithubOrgClient class 
+├── fixtures.py           # Test fixtures with sample payloads 
+├── utils.py              # Utility functions such as access_nested_map, get_json, memoize
+├── test_utils.py         # Unit tests for utils.py
+├── test_client.py        # Unit tests for client.py
+├── test_integration.py   # Integration tests for GithubOrgClient
+└── README.md             # Project documentation
