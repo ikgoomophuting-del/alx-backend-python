@@ -23,19 +23,19 @@ By the end of this project, you should be able to:
 
 0x03-Unittests_and_integration_tests/
 
-├── client.py             # Contains GithubOrgClient class 
+├── client.py                    # Contains GithubOrgClient class 
 
-├── fixtures.py           # Test fixtures with sample payloads 
+├── fixtures.py                  # Test fixtures with sample payloads 
 
-├── utils.py              # Utility functions such as access_nested_map, get_json, memoize
+├── utils.py                     # Utility functions such as access_nested_map, get_json, memoize
 
-├── test_utils.py         # Unit tests for utils.py
+├── test_utils.py                # Unit tests for utils.py
 
-├── test_client.py        # Unit tests for client.py
+├── test_client.py               # Unit tests for client.py
 
-├── test_integration.py   # Integration tests for GithubOrgClient
+├── test_integration.py          # Integration tests for GithubOrgClient
 
-└── README.md             # Project documentation
+└── README.md                    # Project documentation
 
 ---
 
