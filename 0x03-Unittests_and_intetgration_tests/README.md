@@ -14,15 +14,21 @@ It is part of the **ALX Backend Python** specialization.
 - Python 3.7
 - Ubuntu 18.04 LTS
 - All files executable and PEP8 compliant
-- All modules, classes, and functions must have docstrings
+- All modules
+- , classes, and functions must have docstrings
 - Functions and coroutines must be type-annotated
 
 ## Project Structure
 0x03-Unittests_and_integration_tests/
+
 ├── client.py
+
 ├── fixtures.py
+
 ├── test_utils.py
+
 ├── utils.py
+
 └── README.md 
 
 ## Running Tests
