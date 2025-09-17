@@ -85,6 +85,11 @@ class TestMemoize(unittest.TestCase):
 
         test_instance = TestClass()
 
+        self.assertEqual(
+    mocked_method.call_args,
+    ((expected_argument, another_argument),)
+        )
+        
         with patch.object(TestClass, "a_method", return_value=42) as mock_method:
             # First call executes a_method
             result1 = test_instance.a_property
