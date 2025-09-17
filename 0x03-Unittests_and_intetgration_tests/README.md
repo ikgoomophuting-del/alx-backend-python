@@ -20,12 +20,12 @@ It is part of the **ALX Backend Python** specialization.
 
 ## Project Structure
 0x03-Unittests_and_integration_tests/
-
 ├── client.py
 ├── fixtures.py
 ├── test_utils.py
 ├── utils.py
-└── README.md 
+└── README.md
+
 
 ## Tasks Overview
 0. Parameterize a unit test
