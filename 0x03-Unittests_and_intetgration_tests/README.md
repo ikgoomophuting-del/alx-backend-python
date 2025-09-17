@@ -17,6 +17,14 @@ It is part of the **ALX Backend Python** specialization.
 - All modules, classes, and functions must have docstrings
 - Functions and coroutines must be type-annotated
 
+## Project Structure
+0x03-Unittests_and_integration_tests/
+├── client.py
+├── fixtures.py
+├── test_utils.py
+├── utils.py
+└── README.md 
+
 ## Running Tests
 To run a specific test file:
 ```bash
