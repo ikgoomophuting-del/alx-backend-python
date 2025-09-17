@@ -38,7 +38,21 @@ Check different nested dictionary/path combinations.
 
 Write tests for cases where access_nested_map raises a KeyError.
 
+2. Mock HTTP calls
 
+Write unit tests for utils.get_json by mocking HTTP responses.
+
+3. Parameterize and patch
+
+Write tests for memoization functions with @patch.
+
+4. Test a class with mocks
+
+Test methods in client.GithubOrgClient by mocking calls to external APIs.
+
+5. Parameterize integration tests
+
+Write integration tests for client.GithubOrgClient methods using fixtures.
 
 ## Running Tests
 To run a specific test file:
