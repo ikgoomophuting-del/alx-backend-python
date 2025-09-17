@@ -72,4 +72,14 @@ All files in this project must follow these rules:
 - The first line of each file must be exactly:  
   ```bash
   #!/usr/bin/env python3
+
+  Code must follow pycodestyle 2.5.
+
+All files must be executable.
+
+All files must end with a new line.
+
+All modules, classes, and functions must include docstrings that are complete sentences.
+
+All functions and coroutines must be type-annotated.
   
