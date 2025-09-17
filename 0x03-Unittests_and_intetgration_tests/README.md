@@ -27,7 +27,18 @@ It is part of the **ALX Backend Python** specialization.
 ├── utils.py
 └── README.md 
 
-## 
+## Tasks Overview
+0. Parameterize a unit test
+
+Write a test for utils.access_nested_map using @parameterized.expand.
+
+Check different nested dictionary/path combinations.
+
+1. Exceptions
+
+Write tests for cases where access_nested_map raises a KeyError.
+
+
 
 ## Running Tests
 To run a specific test file:
