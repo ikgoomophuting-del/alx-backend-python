@@ -1,0 +1,14 @@
+django-admin startproject messaging_app
+cd messaging_app
+---
+
+## Setup Implementation 
+messaging_app/
+    manage.py
+    messaging_app/
+        __init__.py
+        settings.py
+        urls.py
+        asgi.py
+        wsgi.py
+        
