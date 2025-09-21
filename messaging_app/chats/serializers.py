@@ -6,6 +6,9 @@ from .models import User, Conversation, Message
 # User Serializer
 # -------------------------------
 class UserSerializer(serializers.ModelSerializer):
+    # Explicit password field for input (write-only)
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
         fields = [
@@ -16,15 +19,30 @@ class UserSerializer(serializers.ModelSerializer):
             "phone_number",
             "role",
             "created_at",
+            "password",
         ]
         read_only_fields = ["user_id", "created_at"]
+
+    def create(self, validated_data):
+        password = validated_data.pop("password", None)
+        user = User(**validated_data)
+        if password:
+            user.set_password(password)
+        user.save()
+        return user
+
+    def validate_email(self, value):
+        """Check that email is not empty."""
+        if not value:
+            raise serializers.ValidationError("Email cannot be empty")
+        return value
 
 
 # -------------------------------
 # Message Serializer
 # -------------------------------
 class MessageSerializer(serializers.ModelSerializer):
-    sender = UserSerializer(read_only=True)  # Nested user details
+    sender = serializers.StringRelatedField()  # Displays sender as string (email)
 
     class Meta:
         model = Message
@@ -41,8 +59,9 @@ class MessageSerializer(serializers.ModelSerializer):
 # Conversation Serializer
 # -------------------------------
 class ConversationSerializer(serializers.ModelSerializer):
-    participants = UserSerializer(many=True, read_only=True)  # Nested users
-    messages = MessageSerializer(many=True, read_only=True)  # Nested messages
+    participants = UserSerializer(many=True, read_only=True)
+    # Explicitly use SerializerMethodField for nested messages
+    messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
@@ -53,4 +72,8 @@ class ConversationSerializer(serializers.ModelSerializer):
             "messages",
         ]
         read_only_fields = ["conversation_id", "created_at"]
-  
+
+    def get_messages(self, obj):
+        """Return all messages in this conversation."""
+        messages = obj.messages.all()
+        return MessageSerializer(messages, many=True).data
