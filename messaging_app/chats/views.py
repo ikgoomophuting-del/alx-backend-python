@@ -1,4 +1,4 @@
-awwfrom rest_framework import viewsets, status, filters
+from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -135,3 +135,43 @@ class MessageViewSet(viewsets.ModelViewSet):
 from rest_framework import status
 
 status.HTTP_403_FORBIDDEN  # => 403
+
+# messaging_app/chats/views.py
+from rest_framework import viewsets, permissions
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import Conversation, Message
+from .serializers import ConversationSerializer, MessageSerializer
+from .permissions import IsParticipantOfConversation
+from .pagination import MessagePagination
+from .filters import MessageFilter
+
+
+class ConversationViewSet(viewsets.ModelViewSet):
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer
+    permission_classes = [permissions.IsAuthenticated, IsParticipantOfConversation]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Conversation.objects.filter(sender=user) | Conversation.objects.filter(receiver=user)
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    permission_classes = [permissions.IsAuthenticated, IsParticipantOfConversation]
+    pagination_class = MessagePagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = MessageFilter
+
+    def get_queryset(self):
+        user = self.request.user
+        return Message.objects.filter(conversation__sender=user) | Message.objects.filter(conversation__receiver=user)
+
+    def perform_create(self, serializer):
+        conversation = serializer.validated_data["conversation"]
+        if self.request.user not in [conversation.sender, conversation.receiver]:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("You are not a participant in this conversation.")
+        serializer.save(sender=self.request.user)
+    
