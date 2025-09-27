@@ -14,27 +14,36 @@ from rest_framework import permissions
 
 class IsParticipantOfConversation(permissions.BasePermission):
     """
-    Custom permission to allow only participants in a conversation
-    to send, view, update, and delete messages.
+    Custom permission:
+    - Only authenticated users may access
+    - Only participants of a conversation can view, send, update, or delete messages
     """
 
     def has_permission(self, request, view):
-        # ✅ Ensure the user is authenticated
+        # Ensure the user is logged in
         return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
         """
-        Check if the logged-in user is a participant in the conversation
-        related to the object (message or conversation).
+        Restrict object-level permissions to conversation participants.
         """
+        # Handle messages tied to conversations
         if hasattr(obj, "conversation"):
-            # obj is a Message instance
-            return (
-                request.user == obj.conversation.sender
-                or request.user == obj.conversation.receiver
-            )
+            participants = [obj.conversation.sender, obj.conversation.receiver]
+
+        # Handle direct conversation objects
         elif hasattr(obj, "sender") and hasattr(obj, "receiver"):
-            # obj is a Conversation instance
-            return request.user in [obj.sender, obj.receiver]
+            participants = [obj.sender, obj.receiver]
+
+        else:
+            return False  # object not recognized
+
+        # Read permissions (GET, HEAD, OPTIONS) allowed for participants only
+        if request.method in permissions.SAFE_METHODS:
+            return request.user in participants
+
+        # Unsafe methods (PUT, PATCH, DELETE, POST) also restricted to participants
+        if request.method in ["POST", "PUT", "PATCH", "DELETE"]:
+            return request.user in participants
+
         return False
-        
