@@ -85,3 +85,36 @@ class MessageViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(message)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# messaging_app/chats/views.py
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .models import Conversation, Message
+from .serializers import ConversationSerializer, MessageSerializer
+from .permissions import IsParticipantOfConversation
+
+class ConversationViewSet(viewsets.ModelViewSet):
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer
+    permission_classes = [IsAuthenticated, IsParticipantOfConversation]
+
+    def get_queryset(self):
+        """
+        Only return conversations where the user is a participant.
+        """
+        user = self.request.user
+        return Conversation.objects.filter(sender=user) | Conversation.objects.filter(receiver=user)
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated, IsParticipantOfConversation]
+
+    def get_queryset(self):
+        """
+        Only return messages where the user is a participant.
+        """
+        user = self.request.user
+        return Message.objects.filter(conversation__sender=user) | Message.objects.filter(conversation__receiver=user)
+        
