@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status, filters
+awwfrom rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -131,3 +131,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("You are not a participant in this conversation.")
 
         serializer.save(sender=self.request.user)
+
+from rest_framework import status
+
+status.HTTP_403_FORBIDDEN  # => 403
