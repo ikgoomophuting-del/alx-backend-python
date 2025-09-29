@@ -1,2 +1,6 @@
 2025-09-27 20:55:12.543210 - User: admin - Path: /admin/
 2025-09-27 20:55:30.678912 - User: Anonymous - Path: /api/messages/
+
+cd Django-Middleware-0x03
+python manage.py migrate
+python manage.py runserver
