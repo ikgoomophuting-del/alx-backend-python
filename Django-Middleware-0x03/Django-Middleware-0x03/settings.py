@@ -171,3 +171,5 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
     ],
 }
+
+'messaging_app.middleware.RequestLoggingMiddleware',
