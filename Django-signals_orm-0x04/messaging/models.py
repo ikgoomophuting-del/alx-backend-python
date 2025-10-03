@@ -19,3 +19,9 @@ class MessageHistory(models.Model):
 
     def __str__(self):
         return f"History for message {self.message.id} at {self.edited_at}"
+
+sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
+receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_messages")
+message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name="history")
+user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")
+    
