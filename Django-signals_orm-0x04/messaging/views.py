@@ -35,7 +35,7 @@ class ConversationView(APIView):
 
         # Top-level messages (not replies) between the two users
         messages = Message.objects.filter(
-            sender__in=[request.user, other_user],
+            [sender=request.user, other_user],
             receiver__in=[request.user, other_user],
             parent_message__isnull=True
         ).select_related("sender", "receiver") \
