@@ -83,3 +83,49 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification for {self.user.username} on message {self.message.id}"
+
+from django.db import models
+from django.contrib.auth.models import User
+from .manager import UnreadMessagesManager  # import the manager
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_messages")
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    edited = models.BooleanField(default=False)
+    edited_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="edited_messages"
+    )
+    parent_message = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="replies"
+    )
+    read = models.BooleanField(default=False)
+
+    # Managers
+    objects = models.Manager()  # default manager
+    unread = UnreadMessagesManager()  # custom unread messages manager
+
+    def __str__(self):
+        return f"Message from {self.sender} to {self.receiver} at {self.timestamp}"
+
+    def get_thread(self):
+        thread = []
+        for reply in self.replies.all().select_related("sender", "receiver").prefetch_related("replies"):
+            thread.append({
+                "id": reply.id,
+                "sender": reply.sender.username,
+                "content": reply.content,
+                "timestamp": reply.timestamp,
+                "replies": reply.get_thread()
+            })
+        return thread
