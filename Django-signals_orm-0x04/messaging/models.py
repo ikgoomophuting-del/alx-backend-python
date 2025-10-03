@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_messages")
@@ -18,8 +19,33 @@ class Message(models.Model):
         help_text="The user who last edited this message."
     )
 
+    # Threading
+    parent_message = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="replies",
+        help_text="If this message is a reply, link to the parent message."
+    )
+
     def __str__(self):
         return f"Message from {self.sender} to {self.receiver} at {self.timestamp}"
+
+    def get_thread(self):
+        """
+        Recursively fetch all replies to this message in threaded format.
+        """
+        thread = []
+        for reply in self.replies.all().select_related("sender", "receiver").prefetch_related("replies"):
+            thread.append({
+                "id": reply.id,
+                "sender": reply.sender.username,
+                "content": reply.content,
+                "timestamp": reply.timestamp,
+                "replies": reply.get_thread()
+            })
+        return thread
 
 
 class MessageHistory(models.Model):
