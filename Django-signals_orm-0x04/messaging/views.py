@@ -12,18 +12,20 @@ class MessageListCreateView(generics.ListCreateAPIView):
     List all messages or create a new one.
     Supports parent_message for threaded replies.
     """
-    queryset = Message.objects.all().select_related("sender", "receiver", "parent_message") \
-                                   .prefetch_related("replies")
+    queryset = Message.objects.all().select_related(
+        "sender", "receiver", "parent_message"
+    ).prefetch_related("replies")
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
+        # Automatically set the sender as the logged-in user
         serializer.save(sender=self.request.user)
 
 
 class ConversationView(APIView):
     """
-    Retrieve a threaded conversation between two users.
+    Retrieve a threaded conversation between the logged-in user and another user.
     Returns messages with nested replies.
     """
     permission_classes = [permissions.IsAuthenticated]
@@ -47,7 +49,7 @@ class ConversationView(APIView):
                 "receiver": msg.receiver.username,
                 "content": msg.content,
                 "timestamp": msg.timestamp,
-                "replies": msg.get_thread()
+                "replies": msg.get_thread()  # recursive threaded replies
             })
 
         return Response(data, status=status.HTTP_200_OK)
