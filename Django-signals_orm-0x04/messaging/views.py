@@ -53,3 +53,17 @@ class ConversationView(APIView):
             })
 
         return Response(data, status=status.HTTP_200_OK)
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions, status
+from .models import Message
+from .serializers import MessageSerializer
+
+class UnreadMessagesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        unread_messages = Message.unread.unread_for_user(request.user)
+        serializer = MessageSerializer(unread_messages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
