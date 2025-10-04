@@ -66,3 +66,17 @@ class UnreadMessagesView(APIView):
 
         serializer = MessageSerializer(unread_messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@method_decorator(cache_page(60), name='dispatch')
+class ConversationMessagesView(APIView):
+    """
+    Retrieves messages for a conversation, cached for 60 seconds.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, conversation_id):
+        messages = Message.objects.filter(conversation_id=conversation_id).select_related('sender', 'receiver')
+        serializer = MessageSerializer(messages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
