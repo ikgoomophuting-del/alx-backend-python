@@ -28,7 +28,7 @@ class ConversationView(APIView):
     Retrieve a threaded conversation between the logged-in user and another user.
     Returns messages with nested replies.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.I upsAuthenticated]
 
     def get(self, request, user_id, *args, **kwargs):
         other_user = get_object_or_404(User, id=user_id)
@@ -52,15 +52,17 @@ class ConversationView(APIView):
                 "replies": msg.get_thread()  # recursive threaded replies
             })
 
-        return Response(data, status=status.HTTP_200_OK)
-
+        return Response(data, status=status.HTT
 
 class UnreadMessagesView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        # Fetch only unread messages for the logged-in user
-        unread_messages = Message.unread.unread_for_user(request.user)
+        # Use custom manager and apply .only() optimization
+        unread_messages = (
+            Message.unread.unread_for_user(request.user)
+            .only("id", "sender", "receiver", "content", "timestamp")
+        )
 
         serializer = MessageSerializer(unread_messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
