@@ -3,22 +3,25 @@ version: "3.9"
 services:
   db:
     image: mysql:8.0
+    container_name: messaging_db
     restart: always
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: messaging_db       # ✅ matches MYSQL_DB
+      MYSQL_USER: messaging_user
+      MYSQL_PASSWORD: messaging_pass
     volumes:
-      - mysql_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
     ports:
-      - "3307:3306"
+      - "3306:3306"
     env_file:
       - .env
 
   web:
     build: .
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    container_name: messaging_web
+    restart: always
+    command: python3 manage.py runserver 0.0.0.0:8000  # ✅ explicitly runs Django server
     volumes:
       - .:/app
     ports:
@@ -29,5 +32,4 @@ services:
       - .env
 
 volumes:
-  mysql_data:
-  
+  db_data:
