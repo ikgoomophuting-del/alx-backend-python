@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info
+dist/
+build/
+env/
+venv/
+.venv/
+pip-log.txt
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+
+# Environment variables
+.env
+
+# Docker
+*.pid
+*.seed
+*.bak
+Dockerfile*
+docker-compose*
+*.tar
+*.img
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS / Linux
+.DS_Store
+Thumbs.db
+
+# Cache and temporary
+*.tmp
+*.temp
+__MACOSX
