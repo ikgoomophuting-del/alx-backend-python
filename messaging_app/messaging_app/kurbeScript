@@ -27,4 +27,7 @@ kubectl cluster-info
 echo "📦 Listing pods in all namespaces..."
 kubectl get pods --all-namespaces
 
+chmod +x messaging_app/kurbeScript
+./messaging_app/kurbeScript
+
 echo "✅ Kubernetes cluster is up and running!"
