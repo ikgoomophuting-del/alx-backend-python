@@ -1,33 +1,47 @@
 #!/usr/bin/env bash
 # kurbeScript
-# Script to set up and verify a local Kubernetes cluster using Minikube
+# Script to set up and verify a local Kubernetes cluster in a GitHub or Docker-based environment using kind
 
-# Exit immediately if any command fails
 set -e
 
-echo "🚀 Starting Kubernetes setup using Minikube..."
+echo "🚀 Setting up Kubernetes cluster using kind (Kubernetes in Docker)..."
 
-# Check if minikube is installed
-if ! command -v minikube &> /dev/null
+# Check if kind is installed
+if ! command -v kind &> /dev/null
 then
-    echo "❌ Minikube not found. Please install Minikube first."
-    echo "👉 Visit: https://minikube.sigs.k8s.io/docs/start/"
-    exit 1
+    echo "📦 Installing kind..."
+    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
+    chmod +x ./kind
+    sudo mv ./kind /usr/local/bin/kind
+else
+    echo "kind already installed."
 fi
 
-# Start Minikube cluster
-echo "🌱 Starting Minikube cluster..."
-minikube start
+# Check if kubectl is installed
+if ! command -v kubectl &> /dev/null
+then
+    echo " Installing kubectl..."
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    chmod +x kubectl
+    sudo mv kubectl /usr/local/bin/
+else
+    echo " kubectl already installed."
+fi
 
-# Verify that the cluster is running
-echo "🔍 Checking cluster status..."
+# Create a kind cluster if it doesn’t exist
+if kind get clusters | grep -q "messaging-cluster"; then
+    echo "  Cluster 'messaging-cluster' already exists."
+else
+    echo " Creating a new kind cluster named 'messaging-cluster'..."
+    kind create cluster --name messaging-cluster
+fi
+
+# Verify cluster info
+echo " Verifying cluster info..."
 kubectl cluster-info
 
-# Retrieve and display available pods
-echo "📦 Listing pods in all namespaces..."
-kubectl get pods --all-namespaces
+# Retrieve pods (there will be none yet)
+echo " Listing all pods..."
+kubectl get pods -A || echo "No pods found yet — cluster is running but empty."
 
-chmod +x messaging_app/kurbeScript
-./messaging_app/kurbeScript
-
-echo "✅ Kubernetes cluster is up and running!"
+echo " Kubernetes (kind) cluster setup complete!"
