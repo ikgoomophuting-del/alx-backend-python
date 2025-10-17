@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: messaging-app
-          image: your-dockerhub-username/messaging_app:latest  # ✅ replace with your actual image
+          image: ikgopoleng/messaging_app:latest  # ✅ replace with your actual image
           ports:
             - containerPort: 8000
           env:
