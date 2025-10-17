@@ -3,13 +3,14 @@
 # Script to set up and verify a local Kubernetes cluster in a GitHub or Docker-based environment using kind
 
 set -e
-
-echo "🚀 Setting up Kubernetes cluster using kind (Kubernetes in Docker)..."
+echo " Starting Kubernetes cluster using Minikube..."
+minikube start
+echo " Setting up Kubernetes cluster using kind (Kubernetes in Docker)..."
 
 # Check if kind is installed
 if ! command -v kind &> /dev/null
 then
-    echo "📦 Installing kind..."
+    echo "Installing kind..."
     curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
     chmod +x ./kind
     sudo mv ./kind /usr/local/bin/kind
