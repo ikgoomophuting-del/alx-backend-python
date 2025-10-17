@@ -5,7 +5,7 @@ metadata:
   labels:
     app: messaging-app
 spec:
-  replicas: 2  # You can scale this later
+  replicas: 2  
   selector:
     matchLabels:
       app: messaging-app
@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
         - name: messaging-app
-          image: ikgopoleng/messaging_app:latest  # ✅ replace with your actual image
+          image: ikgopoleng/messaging_app:latest  
           ports:
             - containerPort: 8000
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: "messaging_app.settings"
             - name: DATABASE_HOST
-              value: "mysql"  # refers to db service if running in same cluster
+              value: "mysql"  
             - name: DATABASE_NAME
               valueFrom:
                 secretKeyRef:
