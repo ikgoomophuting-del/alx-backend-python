@@ -1,0 +1,21 @@
+#!/bin/bash
+# kubctl-0x01 — Scale Django app deployment and test performance in Kubernetes
+
+# Step 1: Scale the Django app deployment to 3 replicas
+echo " Scaling the Django app deployment to 3 replicas..."
+kubectl scale deployment django-app-deployment --replicas=3
+
+# Step 2: Verify that multiple pods are running
+echo " Checking running pods..."
+kubectl get pods
+
+# Step 3: Perform load testing using wrk
+# Replace URL below with your actual Django app service URL or NodePort
+echo " Running load test on the scaled app..."
+wrk -t4 -c100 -d30s http://localhost:8000/
+
+# Step 4: Monitor resource usage
+echo " Monitoring resource usage of pods..."
+kubectl top pods
+
+echo " Kubernetes scaling and load testing completed!"
