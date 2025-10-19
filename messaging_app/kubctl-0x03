@@ -1,0 +1,21 @@
+#!/bin/bash
+# Script: kubctl-0x03
+# Objective: Perform a rolling update for Django app without downtime
+
+set -e
+
+echo " Applying rolling update for Django app (version 2.0)..."
+kubectl apply -f blue_deployment.yaml
+
+echo " Monitoring rollout status..."
+kubectl rollout status deployment/django-app-blue
+
+echo " Checking if app remains responsive during update..."
+SERVICE_IP=$(kubectl get svc django-app-service -o jsonpath='{.spec.clusterIP}')
+for i in {1..10}; do
+  curl -s http://$SERVICE_IP:8000/ > /dev/null && echo "✅ Request $i successful" || echo "❌ Request $i failed"
+  sleep 2
+done
+
+echo " Verifying running pods after rollout:"
+kubectl get pods -l app=django-app
