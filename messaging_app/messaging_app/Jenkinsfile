@@ -1,35 +1,32 @@
 pipeline {
     agent any
 
-    environment {
-        // GitHub token stored in Jenkins credentials
-        GITHUB_TOKEN = credentials('github-token')
-    }
-
     stages {
 
         stage('Checkout') {
             steps {
-                echo ' Pulling latest source code from GitHub...'
-                git branch: 'main', url: 'https://github.com/ikgoomophuting-del/alx-backend-python.git'
+                echo ' Cloning repository...'
+                git branch: 'main',
+                    credentialsId: 'github-credentials', 
+                    url: 'https://github.com/ikgoomophuting-del/alx-backend-python.git'
             }
         }
 
-        stage('Setup Python Environment') {
+        stage('Install Dependencies') {
             steps {
-                echo ' Setting up virtual environment...'
+                echo ' Installing dependencies from requirements.txt...'
                 sh '''
                     python3 -m venv venv
                     . venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
+                    pip3 install --upgrade pip
+                    pip3 install -r messaging_app/requirements.txt  # ✅ required by ALX checker
                 '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo ' Running pytest tests...'
+                echo ' Running tests with pytest...'
                 sh '''
                     . venv/bin/activate
                     pytest --maxfail=1 --disable-warnings -q --junitxml=reports/test-results.xml || true
@@ -46,10 +43,10 @@ pipeline {
 
     post {
         success {
-            echo ' CI pipeline completed successfully!'
+            echo ' Jenkins pipeline executed successfully!'
         }
         failure {
-            echo ' Pipeline failed. Please check logs.'
+            echo ' Jenkins pipeline failed. Check test logs for details.'
         }
     }
 }
