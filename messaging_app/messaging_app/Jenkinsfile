@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        // GitHub token stored in Jenkins credentials
+        GITHUB_TOKEN = credentials('github-token')
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo ' Pulling latest source code from GitHub...'
+                git branch: 'main', url: 'https://github.com/ikgoomophuting-del/alx-backend-python.git'
+            }
+        }
+
+        stage('Setup Python Environment') {
+            steps {
+                echo ' Setting up virtual environment...'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                echo ' Running pytest tests...'
+                sh '''
+                    . venv/bin/activate
+                    pytest --maxfail=1 --disable-warnings -q --junitxml=reports/test-results.xml || true
+                '''
+            }
+            post {
+                always {
+                    echo ' Publishing test results...'
+                    junit 'reports/test-results.xml'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo ' CI pipeline completed successfully!'
+        }
+        failure {
+            echo ' Pipeline failed. Please check logs.'
+        }
+    }
+}
