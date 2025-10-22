@@ -2,24 +2,23 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 echo ' Cloning repository...'
                 git branch: 'main',
-                    credentialsId: 'github-credentials', 
+                    credentialsId: 'github-credentials',  
                     url: 'https://github.com/ikgoomophuting-del/alx-backend-python.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo ' Installing dependencies from requirements.txt...'
+                echo ' Installing dependencies...'
                 sh '''
                     python3 -m venv venv
                     . venv/bin/activate
                     pip3 install --upgrade pip
-                    pip3 install -r messaging_app/requirements.txt  # ✅ required by ALX checker
+                    pip3 install -r messaging_app/requirements.txt   
                 '''
             }
         }
@@ -29,7 +28,8 @@ pipeline {
                 echo ' Running tests with pytest...'
                 sh '''
                     . venv/bin/activate
-                    pytest --maxfail=1 --disable-warnings -q --junitxml=reports/test-results.xml || true
+                    pytest --maxfail=1 --disable-warnings -q \
+                        --junitxml=reports/test-results.xml || true
                 '''
             }
             post {
@@ -42,11 +42,7 @@ pipeline {
     }
 
     post {
-        success {
-            echo ' Jenkins pipeline executed successfully!'
-        }
-        failure {
-            echo ' Jenkins pipeline failed. Check test logs for details.'
-        }
+        success { echo ' Jenkins pipeline executed successfully!' }
+        failure { echo ' Pipeline failed — check the logs.' }
     }
 }
