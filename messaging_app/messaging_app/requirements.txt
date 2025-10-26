@@ -10,3 +10,5 @@ requests>=2.32
 mysqlclient>=2.1
 pytest
 pytest-django
+flake8
+coverage
