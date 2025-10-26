@@ -7,3 +7,6 @@ flake8>=6.0
 coverage>=7.0
 mysqlclient>=2.2
 requests>=2.32
+mysqlclient>=2.1
+pytest
+pytest-django
