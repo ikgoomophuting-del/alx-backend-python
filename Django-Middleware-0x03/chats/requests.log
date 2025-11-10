@@ -1,6 +1,30 @@
-2025-09-27 20:55:12.543210 - User: admin - Path: /admin/
-2025-09-27 20:55:30.678912 - User: Anonymous - Path: /api/messages/
+import os
+from pathlib import Path
 
-cd Django-Middleware-0x03
-python manage.py migrate
-python manage.py runserver
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} [{levelname}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'request.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
