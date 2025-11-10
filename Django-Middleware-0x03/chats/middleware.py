@@ -83,18 +83,20 @@ class OffensiveLanguageMiddleware:
         return ip
 
 
-class RolePermissionMiddleware:
-    """Restricts access to admin or moderator users only."""
-
+class RolepermissionMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        if not request.user.is_authenticated:
-            return HttpResponseForbidden("You must be logged in to access this section.")
-
-        user_role = getattr(request.user, "role", None)
-        if user_role not in ("admin", "moderator"):
-            return HttpResponseForbidden("Access denied: insufficient permissions.")
-
+        # Only check for authenticated users
+        user = getattr(request, 'user', None)
+        if user and user.is_authenticated:
+            # Assuming you have a 'role' field on your User model
+            user_role = getattr(user, 'role', None)
+            
+            # Allow access only to admin or moderator roles
+            if user_role not in ['admin', 'moderator']:
+                return HttpResponseForbidden("Access denied: insufficient permissions.")
+        
+        # Continue processing
         return self.get_response(request)
