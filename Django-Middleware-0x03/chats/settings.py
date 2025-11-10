@@ -1,5 +1,11 @@
 
+import os
 from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent  # points to middleware-0x03/
+LOG_DIR = BASE_DIR / 'chats' / 'logs'              # create inside chats/
+LOG_DIR.mkdir(exist_ok=True)
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
