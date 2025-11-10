@@ -6,6 +6,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent  # points to middleware-0x03/
 LOG_DIR = BASE_DIR / 'chats' / 'logs'              # create inside chats/
 LOG_DIR.mkdir(exist_ok=True)
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} [{levelname}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': LOG_DIR / 'request.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
